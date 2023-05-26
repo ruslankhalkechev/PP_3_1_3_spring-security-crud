@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <title>Update user</title>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div d-flex justify-content-start align-items-center class="navbar-brand">
+            <span th:remove="tag" sec:authentication="name">thymeleaf</span>
+        </div>
+        <div class="collapse navbar-collapse d-flex justify-content-end align-items-center">
+            <ul class="navbar-nav nav">
+                <form th:action="@{/logout}" method="post">
+                    <button class="btn btn-sm btn-dark btn-block mb" type="submit">Выйти</button>
+                </form>
+            </ul>
+        </div>
+    </nav>
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-6 mt-2">
+            <h3>Измените данные пользователя</h3>
+            <form th:method="PATCH" th:action="@{/admin/{id}(id=${user.getId()})}" th:object="${user}">
+                <div class="form-group">
+                    <label for="login">Логин</label>
+                    <input type="text" th:field="*{name}" id="login" class="form-control">
+                    <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                    Name Error
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" th:field="*{password}" id="password" class="form-control">
+                    <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                        Password Error
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="name">Имя пользователя</label>
+                    <input type="text" th:field="*{firstName}" id="name" class="form-control">
+                    <span class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">
+                        FirstName Error
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="surname">Фамилия пользователя</label>
+                    <input type="text" th:field="*{surname}" id="surname" class="form-control">
+                    <span class="text-danger" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">
+                        Surname Error
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="age">Возраст пользователя</label>
+                    <input type="text" th:field="*{age}" id="age" class="form-control">
+                    <span class="text-danger" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">
+                        Age Error
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="text" th:field="*{email}" id="email" class="form-control">
+                    <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                        Email Error
+                    </span>
+                </div>
+                <div class="d-flex flex-row">
+                    <div class="form-check" th:each="role : ${userRoles}">
+                        <input type="checkbox"
+                               th:field="*{roles}"
+                               th:value="${role.id}"
+                               th:id="|user-role-checkbox-${role.id}|"
+                               th:checked="${#sets.contains(user.roles, role)}"/>
+                        <label class="form-check-label" th:for="|user-role-checkbox-${role.id}|" th:text="${role.name}">
+                            ROLE NAME</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                        <span class="text-danger" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">
+                        Email Error
+                        </span>
+                </div>
+
+
+                <div class="d-flex justify-content-end align-items-center mb-4">
+                    <button class="btn btn-primary" type="submit">
+                        <strong>Изменить</strong>
+                    </button>
+                    <div>
+                        <a class="btn btn-primary ml-4" href="/admin">Отменить</a>
+                    </div>
+                </div>
+            </form>
+        </div> <!-- колонка -->
+    </div> <!-- row внутри container -->
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+</html>
