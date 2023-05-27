@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,6 +19,7 @@ import ru.khalkechev.springsecuritycrud.service.UserService;
 import ru.khalkechev.springsecuritycrud.util.UserValidator;
 
 import java.security.Principal;
+
 
 @Controller
 @RequestMapping("/")
@@ -52,7 +51,7 @@ public class UserController {
 
     @PostMapping("/admin")
     public String create(@ModelAttribute("user") @Valid User user, Errors errors) {
-      //  userValidator.validate(user, errors);
+        userValidator.validate(user, errors);
         if (errors.hasErrors()) {
             return "/admin/new";
         }
@@ -71,6 +70,12 @@ public class UserController {
     @PatchMapping("/admin/{id}")
     public String update(@ModelAttribute("user") @Valid User user, Errors errors,
                          @PathVariable("id") long id, Model model) {
+
+        User updatedUser = userService.getUserById(id);
+        if (!updatedUser.getName().equals(user.getName())) {
+            userValidator.validate(user, errors);
+        }
+
         if (errors.hasErrors()) {
             model.addAttribute("userRoles", userService.getSetOfRoles());
             return "/admin/edit";

@@ -13,9 +13,11 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 
 public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     protected Log logger = LogFactory.getLog(this.getClass());
@@ -51,7 +53,8 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
         roleTargetUrlMap.put("ROLE_ADMIN", "/admin");
         roleTargetUrlMap.put("ROLE_USER", "/user");
 
-        final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        final List<? extends GrantedAuthority> authorities = authentication.getAuthorities().stream()
+                .sorted(Comparator.comparing((GrantedAuthority a) -> a.getAuthority())).toList();
         for (final GrantedAuthority grantedAuthority : authorities) {
             String authorityName = grantedAuthority.getAuthority();
             if (roleTargetUrlMap.containsKey(authorityName)) {
